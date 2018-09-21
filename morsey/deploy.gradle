@@ -1,0 +1,153 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+apply from: 'keystore.gradle' // the file, containing the bintray API key
+ext {
+    // This configuration will result in:
+    // compile '<groupId>:<artifactId>:<libVersion>'
+    groupId = 'io.jul.morsey' // package name of the project
+    artifactId = "morsey" // module name of the library
+
+    libVersionCode = 1
+    libVersion = "0.0.1"
+
+    bintrayRepo = 'Morsey'
+    bintrayName = rootProject.ext.libBintrayName
+
+    publishedGroupId = GROUP
+    libraryName = rootProject.ext.libModuleName
+    artifact = rootProject.ext.libModuleName // Has to be same as your library module name
+
+    libraryDescription = rootProject.ext.libModuleDesc
+
+    // Your github repo link
+    siteUrl = rootProject.ext.libPomUrl
+    gitUrl = rootProject.ext.libPomUrl + '.git'
+    githubRepository = rootProject.ext.libGithubRepo
+
+    libraryVersion = rootProject.ext.libVersion
+
+    developerId = POM_DEVELOPER_ID
+    developerName = POM_DEVELOPER_NAME
+    developerEmail = POM_DEVELOPER_EMAILID
+
+    licenseName = POM_LICENCE_NAME
+    licenseUrl = POM_LICENCE_URL
+    allLicenses = [POM_ALL_LICENCES]
+}
+
+version = libVersion
+group = groupId
+//take a look at https://github.com/bintray/gradle-bintray-plugin#buildgradle
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = username // Defined in keystore.gradle file
+    key = apikey // Defined in keystore.gradle file
+    configurations = ['archives']
+    publish = true //[Default: false] Whether version should be auto published after an upload
+    override = false //[Default: false] Whether to override version artifacts already published
+    // Package configuration. The plugin will use the repo and name properties to check if the
+    // package already exists. In that case, there's no need to configure the other package
+    // properties (like userOrg, desc, etc).
+    pkg {
+        version {
+            name = libVersion
+            desc = libraryDescription
+            gpg {
+                sign = false //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+        }
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        issueTrackerUrl = siteUrl + '/issues'
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        githubRepo = githubRepository //Optional Github repository
+        githubReleaseNotesFile = 'README.md' //Optional Github readme file
+//        publish = false
+        publicDownloadNumbers = true
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                groupId groupId
+                artifactId artifactId
+                version libVersion
+                name artifactId // pom.project.name must be same as bintray.pkg.name
+
+                // Add your description here
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+//just copy paste the lines below
+if (project.hasProperty("kotlin")) { //Kotlin libraries
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc, dependsOn: dokka) {
+
+    }
+} else if (project.hasProperty("android")) {
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    // options.encoding = 'UTF-8'
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}

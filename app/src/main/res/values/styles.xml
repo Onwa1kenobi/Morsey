@@ -1,0 +1,34 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
+    </style>
+
+    <style name="AppTheme.Widget.TextView" parent="@android:style/TextAppearance">
+        <!-- Custom Attr-->
+        <item name="fontPath">font/raleway_regular.ttf</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="TitleTextAppearance" parent="AppTheme.Widget.TextView">
+        <item name="fontPath">font/raleway_semibold.ttf</item>
+    </style>
+
+    <style name="ToolbarTitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="fontPath">font/raleway_semibold.ttf</item>
+    </style>
+
+    <style name="AppTheme.Switch" parent="Theme.AppCompat">
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="colorSwitchThumbNormal">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="android:colorForeground">@color/colorAccent</item>
+    </style>
+
+</resources>

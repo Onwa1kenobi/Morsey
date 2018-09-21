@@ -1,0 +1,48 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.2.61'
+    ext.dokka_version = '0.9.17'
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+
+        // Required plugins added to classpath to facilitate pushing to JCenter/Bintray
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+
+        // Documentation engine for kotlin
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokka_version}"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    // Morsey Library Info
+    libVersionCode = 1
+    libVersion = '0.0.1'
+
+    libPomUrl = 'https://github.com/onwa1kenobi/morsey'
+    libGithubRepo = 'onwa1kenobi/morsey'
+    libModuleName = 'morsey'
+    libModuleDesc = 'An Android library to convert string to and from Morse code.'
+    libBintrayName = 'morsey'
+}
