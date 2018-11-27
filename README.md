@@ -43,6 +43,8 @@ morsey.unMorseRealTime(inputField, outputLabel)
 `inputField` refers to the `EditText` that takes in the input to be translated, while `outputLabel` refers to
 the `TextView` that shows the translated output. The sample app images shown give instances of usage.
 
+![](morse_rt.png) ![](unmorse_rt.png)
+
 The `EditText` listener can be unregistered by simply calling
 ```kotlin
 morsey.unregisterMorsey(inputField)
