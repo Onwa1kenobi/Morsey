@@ -7,8 +7,8 @@ ext {
     groupId = 'io.jul.morsey' // package name of the project
     artifactId = "morsey" // module name of the library
 
-    libVersionCode = 1
-    libVersion = "0.0.1"
+    libVersionCode = 2
+    libVersion = "1.0.0"
 
     bintrayRepo = 'Morsey'
     bintrayName = rootProject.ext.libBintrayName
